@@ -1,12 +1,9 @@
-import {In} from 'typeorm'
 import assert from 'assert'
 
 import * as ss58 from '@subsquid/ss58'
-import {Store, TypeormDatabase} from '@subsquid/typeorm-store'
 
 import * as erc20 from './abi/erc20'
 import * as vault from './abi/vault'
-import {Owner, Transfer} from "./model"
 import {
     processor,
     SS58_NETWORK,
@@ -89,9 +86,9 @@ async function getBatchUnlockRecords(ctx: any): Promise<void> {
                                 $set: {
                                     id: event.id,
                                     staker: decodedEvent.staker,
-                                    shares: decodedEvent.shares,
-                                    spot_value: decodedEvent.spotValue,
-                                    batch_id: decodedEvent.batchId,
+                                    shares: decodedEvent.shares.toString(),
+                                    spot_value: decodedEvent.spotValue.toString(),
+                                    batch_id: decodedEvent.batchId.toString(),
                                 }
                             },
                             upsert: true
@@ -125,8 +122,8 @@ async function getStakeRecords(ctx: any): Promise<void> {
                                 $set: {
                                     id: event.id,
                                     staker:decodedEvent.staker,
-                                    azero:decodedEvent.azero,
-                                    newShares:decodedEvent.newShares,  
+                                    azero:decodedEvent.azero.toString(),
+                                    newShares:decodedEvent.newShares.toString(),  
                                 }
                             },
                             upsert: true
@@ -159,8 +156,8 @@ async function getUnlockRecords(ctx: any): Promise<void> {
                                 $set: {
                                     id: event.id,
                                     staker:decodedEvent.staker,
-                                    shares:decodedEvent.shares,
-                                    batch_id:decodedEvent.batchId,
+                                    shares:decodedEvent.shares.toString(),
+                                    batch_id:decodedEvent.batchId.toString(),
                                 }
                             },
                             upsert: true
@@ -194,9 +191,9 @@ async function getCancellationRecords(ctx: any): Promise<void> {
                                 $set: {
                                     id: event.id,
                                     staker:decodedEvent.staker,
-                                    shares:decodedEvent.shares,
-                                    batch_id:decodedEvent.batchId,
-                                    unlock_id:decodedEvent.unlockId
+                                    shares:decodedEvent.shares.toString(),
+                                    batch_id:decodedEvent.batchId.toString(),
+                                    unlock_id:decodedEvent.unlockId.toString()
                                 }
                             },
                             upsert: true
@@ -229,7 +226,7 @@ async function getRedemptionRecord(ctx: any): Promise<void> {
                                 $set: {
                                     id: event.id,
                                     staker:decodedEvent.staker,
-                                    unlock_id:decodedEvent.unlockId
+                                    unlock_id:decodedEvent.unlockId.toString()
                                 }
                             },
                             upsert: true
@@ -262,7 +259,7 @@ async function getTransferRecords(ctx: any): Promise<void> {
                                     id: event.id,
                                     from: decodedEvent.from && ss58.codec(SS58_NETWORK).encode(decodedEvent.from),
                                     to: decodedEvent.to && ss58.codec(SS58_NETWORK).encode(decodedEvent.to),
-                                    amount: decodedEvent.value,
+                                    amount: decodedEvent.value.toString(),
                                     block: block.header.height,
                                     timestamp: new Date(block.header.timestamp),
                                     extrinsicHash: event.extrinsic.hash
