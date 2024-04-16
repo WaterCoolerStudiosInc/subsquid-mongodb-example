@@ -57,8 +57,8 @@ import { MongoDBDatabase } from './mongo-database'
         unlock_id: u64,
     }
  */
-
-const mongoDB = new MongoDBDatabase('mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin', 'aleph-indexer', 58879836)
+const localConnectionString = 'mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin'
+const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString, 'aleph-indexer', 58879836)
     
 processor.run(mongoDB, async ctx => {
     console.log("PROCESSING LOOP")
