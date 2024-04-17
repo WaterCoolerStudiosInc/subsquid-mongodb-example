@@ -64,7 +64,6 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.*
 !.env.*.example
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -98,6 +97,3 @@ yarn.lock
 # Compiled TypeScript
 src/**/*.js
 src/**/*.map
-graphql/lib/
-
-lib/

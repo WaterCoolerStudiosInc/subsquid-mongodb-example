@@ -18,6 +18,10 @@ const CONTRACT_ADDRESS_SS58 = '5G12m7C274qk6MVuW9Vb5Dno31EBVcRuPt85yYE1wQ5ZRTnq'
 export const CONTRACT_ADDRESS = ss58.codec(42).decode(CONTRACT_ADDRESS_SS58)
 
 export const processor = new SubstrateBatchProcessor()
+    // TODO: add dev env check and use the following two gateways
+    // https://v2.archive.subsquid.io/network/aleph-zero │
+    // https://v2.archive.subsquid.io/network/aleph-zero-testnet 
+    // RPC endpoints should also be added to this dev env check, 
     .setGateway('https://v2.archive.subsquid.io/network/aleph-zero-testnet')
     .setRpcEndpoint({
         url: assertNotNull(process.env.RPC_ENDPOINT),
@@ -36,8 +40,8 @@ export const processor = new SubstrateBatchProcessor()
         }
     })
     .setBlockRange({
-        // genesis block happens to not have a timestamp, so it's easier
-        // to start from 1 in cases when the deployment height is unknown
+        // TODO: pass in the earliest contract deployment block we have here, better as env var as its also needed in main.ts
+        // ideally we should automagically read this
         from: 58879836
     })
 
