@@ -1,0 +1,1 @@
+{"version":3,"file":"transfers-resolver.js","sourceRoot":"","sources":["../../src/resolvers/transfers-resolver.ts"],"names":[],"mappings":";;;AAAA,mDAAoD;AAEvC,QAAA,iBAAiB,GAAG;IAC/B,KAAK,EAAE;QACL,eAAe,EAAE,KAAK,IAAI,EAAE,CAAC,MAAM,0BAAc,CAAC,IAAI,CAAC,EAAE,CAAC;KAC3D;CACF,CAAA"}
