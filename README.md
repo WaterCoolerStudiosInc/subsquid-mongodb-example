@@ -23,8 +23,12 @@ sqd process
 
 # 5. Build and run the graphql server
 cd graphql
+npm install
 npm run build
 npm run dev
+
+# The database can be reset via
+sqd down
 
 ```
 
