@@ -10,6 +10,7 @@ import {
     CONTRACT_ADDRESS,
 } from './processor'
 import { MongoDBDatabase } from './mongo-database'
+
 /**
  *   pub struct Staked {
         #[ink(topic)]
@@ -69,7 +70,7 @@ processor.run(mongoDB, async ctx => {
 
 async function getBatchUnlockRecords(ctx: any): Promise<void> {
     console.log('GETTING BATCH UNLOCK RECORDS')
-    const collection = ctx.store.collection('BatchUnlockSent')
+    const collection = ctx.store.collection('batch_unlocks')
     const bulkOps = [] 
 
     for (const block of ctx.blocks) {
@@ -85,7 +86,6 @@ async function getBatchUnlockRecords(ctx: any): Promise<void> {
                             update: { 
                                 $set: {
                                     id: event.id,
-                                    staker: decodedEvent.staker,
                                     shares: decodedEvent.shares.toString(),
                                     spot_value: decodedEvent.spotValue.toString(),
                                     batch_id: decodedEvent.batchId.toString(),
@@ -105,7 +105,7 @@ async function getBatchUnlockRecords(ctx: any): Promise<void> {
 
 async function getStakeRecords(ctx: any): Promise<void> {
     console.log('GETTING STAKE RECORDS')
-    const collection = ctx.store.collection('Staked')
+    const collection = ctx.store.collection('stakes')
     const bulkOps = []
 
     for (const block of ctx.blocks) {
@@ -124,11 +124,13 @@ async function getStakeRecords(ctx: any): Promise<void> {
                                     staker:decodedEvent.staker,
                                     azero:decodedEvent.azero.toString(),
                                     newShares:decodedEvent.newShares.toString(),  
-                                }
+                                } 
                             },
                             upsert: true
                         }
                     })
+
+                    // save total_shares 
                 }
             }
         }
@@ -140,7 +142,7 @@ async function getStakeRecords(ctx: any): Promise<void> {
 
 async function getUnlockRecords(ctx: any): Promise<void> {
     console.log('GETTING UNLOCK RECORDS')
-    const collection = ctx.store.collection('UnlockRequested')
+    const collection = ctx.store.collection('unlock_requests')
     const bulkOps = []
     for (const block of ctx.blocks) {
         assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
@@ -174,7 +176,7 @@ async function getUnlockRecords(ctx: any): Promise<void> {
 
 async function getCancellationRecords(ctx: any): Promise<void> {
     console.log('GETTING CANCELLATION RECORDS')
-    const collection = ctx.store.collection('UnlockCanceled')
+    const collection = ctx.store.collection('unlock_cancels')
     const bulkOps = []
 
     for (const block of ctx.blocks) {
@@ -210,7 +212,7 @@ async function getCancellationRecords(ctx: any): Promise<void> {
 
 async function getRedemptionRecord(ctx: any): Promise<void> {
     console.log('GETTING REDEMPTION RECORDS')
-    const collection = ctx.store.collection('UnlockRedeemed')
+    const collection = ctx.store.collection('unlock_redeems')
     const bulkOps = []
     for (const block of ctx.blocks) {
         assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
@@ -242,7 +244,7 @@ async function getRedemptionRecord(ctx: any): Promise<void> {
 }
 
 async function getTransferRecords(ctx: any): Promise<void> {
-    const collection = ctx.store.collection('UnlockRedeemed')
+    const collection = ctx.store.collection('transfers')
     const bulkOps = []
     for (const block of ctx.blocks) {
         assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
@@ -261,7 +263,7 @@ async function getTransferRecords(ctx: any): Promise<void> {
                                     to: decodedEvent.to && ss58.codec(SS58_NETWORK).encode(decodedEvent.to),
                                     amount: decodedEvent.value.toString(),
                                     block: block.header.height,
-                                    timestamp: new Date(block.header.timestamp),
+                                    timestamp: block.header.timestamp,
                                     extrinsicHash: event.extrinsic.hash
                                 }
                             },

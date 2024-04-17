@@ -1,4 +1,4 @@
-require('dotenv/config');
-import { app } from "./api/index";
+require('dotenv/config')
+import { app } from './api/index'
 
-app.listen(3001, () => console.info("Server started"))
+app.listen(3001, () => console.info('Server started'))
