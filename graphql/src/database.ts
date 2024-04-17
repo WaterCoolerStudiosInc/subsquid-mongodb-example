@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 
 export async function connectToDatabase() {
   try {
-    await mongoose.connect('mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin')
+    const localConnectionString = 'mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin'
+    await mongoose.connect(process.env.DB_URL || localConnectionString)
 
     console.log('Successfully connected to MongoDB')
   } catch (error) {
