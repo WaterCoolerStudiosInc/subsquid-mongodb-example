@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
+const apollo_server_core_1 = require("apollo-server-core");
 const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
@@ -20,6 +21,7 @@ const startApolloServer = async (app, httpServer) => {
     const server = new apollo_server_express_1.ApolloServer({
         typeDefs: type_defs_1.TYPE_DEFS,
         resolvers: resolvers_1.RESOLVERS,
+        plugins: [(0, apollo_server_core_1.ApolloServerPluginDrainHttpServer)({ httpServer })],
     });
     await server.start();
     server.applyMiddleware({ app });

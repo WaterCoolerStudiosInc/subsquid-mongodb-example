@@ -8,7 +8,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 async function connectToDatabase() {
     try {
         const localConnectionString = 'mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin';
-        console.log(process.env.RPC_ENDPOINT);
         await mongoose_1.default.connect(process.env.DB_URL || localConnectionString);
         console.log('Successfully connected to MongoDB');
     }
