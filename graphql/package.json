@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "dev": "nodemon lib/dev.js"
+    "dev": "nodemon lib/api/index.js"
   },
   "dependencies": {
     "apollo-server-core": "^3.5.0",
