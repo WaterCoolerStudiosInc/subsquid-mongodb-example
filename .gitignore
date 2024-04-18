@@ -97,3 +97,5 @@ yarn.lock
 # Compiled TypeScript
 src/**/*.js
 src/**/*.map
+
+graphql/api/
