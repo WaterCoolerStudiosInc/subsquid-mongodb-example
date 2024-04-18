@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-express'
-import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
@@ -21,7 +21,7 @@ const startApolloServer = async(app: Express, httpServer: http.Server<typeof htt
   const server = new ApolloServer({
     typeDefs: TYPE_DEFS,
     resolvers: RESOLVERS,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), ApolloServerPluginLandingPageGraphQLPlayground()],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
   await server.start()
