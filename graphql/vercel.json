@@ -1,3 +1,16 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/lib/api" }]
+    "version": 2,
+    "name": "indexer-gql",
+    "builds": [
+      {
+        "src": "api/**/*.ts",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/graphql",
+        "dest": "/api/graphql.ts"
+      }
+    ]
 }
