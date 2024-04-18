@@ -3,7 +3,7 @@
     "module": "commonjs",
     "target": "es2020",
     "moduleResolution": "node",
-    "outDir": "lib",
+    "outDir": "api",
     "rootDir": "src",
     "strict": true,
     "declaration": false,

@@ -1,17 +1,16 @@
 {
-  "name": "indexer-gql",
-  "builds": [
-      { 
-        "src": "lib/index.js", 
-        "use": "@vercel/node",
-        "config": {
-          "includeFiles": [
-            "lib/**"
-          ]
-        }
+    "version": 2,
+    "name": "indexer-gql",
+    "builds": [
+      {
+        "src": "api/**/*.ts",
+        "use": "@vercel/node"
       }
-  ],
-  "routes": [
-      { "src": "/(.*)", "dest": "lib/index.js" }
-  ]
+    ],
+    "routes": [
+      {
+        "src": "/graphql",
+        "dest": "/api/graphql.ts"
+      }
+    ]
 }
