@@ -1,7 +1,5 @@
 import {assertNotNull} from '@subsquid/util-internal'
-import {toHex} from '@subsquid/util-internal-hex'
 import * as ss58 from '@subsquid/ss58'
-import {lookupArchive} from '@subsquid/archive-registry'
 import {
     BlockHeader,
     DataHandlerContext,

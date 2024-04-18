@@ -1,9 +1,8 @@
 import { MongoClient, Db } from 'mongodb'
-import { Database, FinalDatabase } from '@subsquid/util-internal-processor-tools'
+import { FinalDatabase } from '@subsquid/util-internal-processor-tools'
 import { FinalTxInfo, HashAndHeight } from '@subsquid/typeorm-store/lib/interfaces'
 import { assertNotNull } from '@subsquid/substrate-processor'
 import assert from 'assert'
-require('dotenv/config')
 
 export class MongoDBDatabase implements FinalDatabase<Db> {
   private client: MongoClient
