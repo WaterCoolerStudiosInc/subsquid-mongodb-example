@@ -1,3 +1,17 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
+  "name": "indexer-gql",
+  "builds": [
+      { 
+        "src": "lib/index.js", 
+        "use": "@vercel/node",
+        "config": {
+          "includeFiles": [
+            "lib/**"
+          ]
+        }
+      }
+  ],
+  "routes": [
+      { "src": "/(.*)", "dest": "lib/index.js" }
+  ]
 }
