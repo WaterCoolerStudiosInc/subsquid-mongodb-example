@@ -20,6 +20,8 @@
   "devDependencies": {
     "consola": "^2.15.3",
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "rimraf": "^5.0.5",
+    "tsc": "^2.0.4"
   }
 }
