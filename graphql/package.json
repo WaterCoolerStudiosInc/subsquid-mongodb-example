@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "rm -rf api && tsc",
+    "build": "tsc",
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
