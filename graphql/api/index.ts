@@ -1,4 +1,3 @@
-
 import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import http from 'http'
