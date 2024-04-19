@@ -1,12 +1,12 @@
 import { ApolloServer } from 'apollo-server-express'
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
-import { connectToDatabase } from '../database'
+import { connectToDatabase } from './database'
 import { Express } from 'express-serve-static-core'
-import { TYPE_DEFS } from '../type-defs/type-defs'
-import { RESOLVERS } from '../resolvers/resolvers'
+import { TYPE_DEFS } from './type-defs/type-defs'
+import { RESOLVERS } from './resolvers/resolvers'
 
 export const app = express()
 
@@ -21,7 +21,7 @@ const startApolloServer = async(app: Express, httpServer: http.Server<typeof htt
   const server = new ApolloServer({
     typeDefs: TYPE_DEFS,
     resolvers: RESOLVERS,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), ApolloServerPluginLandingPageGraphQLPlayground()],
   })
 
   await server.start()
@@ -29,5 +29,7 @@ const startApolloServer = async(app: Express, httpServer: http.Server<typeof htt
 }
 
 startApolloServer(app, httpServer)
+
+app.listen(process.env.PORT || 4000, () => console.info('Server started'))
 
 export default httpServer
