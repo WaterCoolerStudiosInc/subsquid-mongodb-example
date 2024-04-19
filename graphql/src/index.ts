@@ -30,4 +30,6 @@ const startApolloServer = async(app: Express, httpServer: http.Server<typeof htt
 
 startApolloServer(app, httpServer)
 
+app.listen(process.env.PORT || 4000, () => console.info('Server started'))
+
 export default httpServer
