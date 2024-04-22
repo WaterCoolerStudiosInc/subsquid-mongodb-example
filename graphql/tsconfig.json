@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "lib": ["ESNext", "DOM"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
+    "module": "commonjs",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "target": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "incremental": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["api/**/*"],
   "exclude": ["node_modules"]
 }
