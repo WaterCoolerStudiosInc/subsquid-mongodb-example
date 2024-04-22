@@ -45,3 +45,5 @@ When changing the variables stored to the database within main.ts, we must also 
 - Subsquid gateways for aleph zero can be found at:
   https://v2.archive.subsquid.io/network/aleph-zero
   https://v2.archive.subsquid.io/network/aleph-zero-testnet
+
+- ABI json files should be located at the top level abi folder. You should generate new ts models after updating the contract. That can be done like so `npx squid-ink-typegen --abi abi/vault.json --output src/abi/vault.ts`

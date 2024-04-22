@@ -2,7 +2,7 @@ import {
     processor,
 } from './processor'
 import { MongoDBDatabase } from './mongo-database'
-import { getBatchUnlockRecords, getCancellationRecords, getRedemptionRecord, getStakeRecords, getUnlockRecords } from './index-events'
+import { startIndexingVault } from './index-events'
 
 const localConnectionString = 'mongodb://root:root@localhost:27017/aleph-indexer?authSource=admin'
 
@@ -11,10 +11,6 @@ const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
     
 processor.run(mongoDB, async ctx => {
     console.log("PROCESSING LOOP")
-    await getUnlockRecords(ctx)
-    await getBatchUnlockRecords(ctx)
-    await getCancellationRecords(ctx)
-    await getRedemptionRecord(ctx)
-    await getStakeRecords(ctx)
+    await startIndexingVault(ctx)
     // await getTransferRecords(ctx)
 })

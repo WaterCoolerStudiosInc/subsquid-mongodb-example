@@ -10,23 +10,23 @@ import {
     Extrinsic as _Extrinsic
 } from '@subsquid/substrate-processor'
 
-export const SS58_NETWORK = 'aleph-zero-testnet'
+export const SS58_NETWORK = process.env.NETWORK || 'aleph-zero-testnet'
+export const VAULT_CONTRACT_ADDRESS = ss58.codec(42).decode(process.env.VAULT_CONTRACT_ADDRESS || '')
 
-const CONTRACT_ADDRESS_SS58 = '5G12m7C274qk6MVuW9Vb5Dno31EBVcRuPt85yYE1wQ5ZRTnq'
-export const CONTRACT_ADDRESS = ss58.codec(42).decode(CONTRACT_ADDRESS_SS58)
+// https://v2.archive.subsquid.io/network/aleph-zero │
+// https://v2.archive.subsquid.io/network/aleph-zero-testnet 
+// RPC endpoints should also be added to this dev env check, 
+const GATEWAY_URL = SS58_NETWORK === 'aleph-zero' ? 'https://v2.archive.subsquid.io/network/aleph-zero' : 'https://v2.archive.subsquid.io/network/aleph-zero-testnet '
 
 export const processor = new SubstrateBatchProcessor()
-    // TODO: add dev env check and use the following two gateways
-    // https://v2.archive.subsquid.io/network/aleph-zero │
-    // https://v2.archive.subsquid.io/network/aleph-zero-testnet 
-    // RPC endpoints should also be added to this dev env check, 
-    .setGateway('https://v2.archive.subsquid.io/network/aleph-zero-testnet')
+
+    .setGateway(GATEWAY_URL)
     .setRpcEndpoint({
         url: assertNotNull(process.env.RPC_ENDPOINT),
         rateLimit: 10
     })
     .addContractsContractEmitted({
-        contractAddress: [CONTRACT_ADDRESS],
+        contractAddress: [VAULT_CONTRACT_ADDRESS],
         extrinsic: true
     })
     .setFields({

@@ -5,18 +5,18 @@ import * as erc20 from './abi/erc20'
 import * as vault from './abi/vault'
 import {
   SS58_NETWORK,
-  CONTRACT_ADDRESS,
+  VAULT_CONTRACT_ADDRESS,
 } from './processor'
 import { DataHandlerContext } from '@subsquid/substrate-processor'
 import { Db } from 'mongodb'
-
 
 /*
 TODO
 - Start tracking total shares and total pooled
 - Create user object and start tracking their 
 */
-export async function getBatchUnlockRecords(
+
+export async function startIndexingVault(
     ctx: DataHandlerContext<Db, {
     block: {
         timestamp: true;
@@ -25,64 +25,36 @@ export async function getBatchUnlockRecords(
         hash: true;
     };
   }>): Promise<void> {
-  console.log('GETTING BATCH UNLOCK RECORDS')
-  const collection = ctx.store.collection('batch_unlocks')
-  const bulkOps = [] 
-
   for (const block of ctx.blocks) {
       assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
       for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
+          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === VAULT_CONTRACT_ADDRESS) {
               assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
               const decodedEvent = vault.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'BatchUnlockSent') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
-                              $set: {
-                                  id: event.id,
-                                  shares: decodedEvent.shares.toString(),
-                                  spot_value: decodedEvent.spotValue.toString(),
-                                  batch_id: decodedEvent.batchId.toString(),
-                              }
-                          },
-                          upsert: true
-                      }
-                  })
-              }
-          }
-      }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
-  }
-}
 
-export async function getStakeRecords(
-  ctx: DataHandlerContext<Db, {
-    block: {
-        timestamp: true;
-    };
-    extrinsic: {
-        hash: true;
-    };
-  }>): Promise<void> {
-  console.log('GETTING STAKE RECORDS')
-  const collection = ctx.store.collection('stakes')
-  const bulkOps = []
+              switch (decodedEvent.__kind) {
+                case 'BatchUnlockSent' : {
+                    const collection = ctx.store.collection('batch_unlocks')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                shares: decodedEvent.shares.toString(),
+                                spot_value: decodedEvent.spotValue.toString(),
+                                batch_id: decodedEvent.batchId.toString(),
+                            }
+                        }, 
+                        { upsert: true }
+                    )
+                    break
+                }
 
-  for (const block of ctx.blocks) {
-      assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
-      for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
-              assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
-              const decodedEvent = vault.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'Staked') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
+                case 'Staked': {
+                    const collection = ctx.store.collection('stakes')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
                               $set: {
                                   id: event.id,
                                   staker:decodedEvent.staker,
@@ -90,144 +62,111 @@ export async function getStakeRecords(
                                   newShares:decodedEvent.newShares.toString(),  
                               } 
                           },
-                          upsert: true
-                      }
-                  })
+                          { upsert: true }
+                    )
+                    break
+                }
 
-                  // save total_shares 
-              }
-          }
-      }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
-  }
-}
+                case 'UnlockRequested': {
+                    const collection = ctx.store.collection('unlock_requests')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                staker:decodedEvent.staker,
+                                shares:decodedEvent.shares.toString(),
+                                batch_id:decodedEvent.batchId.toString(),
+                            }
+                        },
+                        { upsert: true }
+                    )
+                    break
+                }
 
-export async function getUnlockRecords(
-  ctx: DataHandlerContext<Db, {
-    block: {
-        timestamp: true;
-    };
-    extrinsic: {
-        hash: true;
-    };
-  }>): Promise<void> {
-  console.log('GETTING UNLOCK RECORDS')
-  const collection = ctx.store.collection('unlock_requests')
-  const bulkOps = []
-  for (const block of ctx.blocks) {
-      assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
-      for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
-              assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
-              const decodedEvent = vault.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'UnlockRequested') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
-                              $set: {
-                                  id: event.id,
-                                  staker:decodedEvent.staker,
-                                  shares:decodedEvent.shares.toString(),
-                                  batch_id:decodedEvent.batchId.toString(),
-                              }
+                case 'UnlockCanceled': {
+                    const collection = ctx.store.collection('unlock_cancels')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                staker:decodedEvent.staker,
+                                shares:decodedEvent.shares.toString(),
+                                batch_id:decodedEvent.batchId.toString(),
+                                unlock_id:decodedEvent.unlockId.toString()
+                            }
+                        },
+                        { upsert: true }
+                    )
+                    break
+                }
+
+                case 'UnlockRedeemed': {
+                    const collection = ctx.store.collection('unlock_redeems')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                staker:decodedEvent.staker,
+                                unlock_id:decodedEvent.unlockId.toString()
+                            }
                           },
-                          upsert: true
-                      }
-                  })
-              }
-          }
-      }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
-  }
-}
+                          { upsert: true }
+                    )
+                    break
+                }
 
-export async function getCancellationRecords(
-  ctx: DataHandlerContext<Db, {
-    block: {
-        timestamp: true;
-    };
-    extrinsic: {
-        hash: true;
-    };
-  }>): Promise<void> {
-  console.log('GETTING CANCELLATION RECORDS')
-  const collection = ctx.store.collection('unlock_cancels')
-  const bulkOps = []
-
-  for (const block of ctx.blocks) {
-      assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
-      for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
-              assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
-              const decodedEvent = vault.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'UnlockCanceled') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
-                              $set: {
-                                  id: event.id,
-                                  staker:decodedEvent.staker,
-                                  shares:decodedEvent.shares.toString(),
-                                  batch_id:decodedEvent.batchId.toString(),
-                                  unlock_id:decodedEvent.unlockId.toString()
-                              }
+                case 'Restaked': {
+                    const collection = ctx.store.collection('restakes')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                caller: decodedEvent.caller,
+                                azero: decodedEvent.azero,
+                                incentive: decodedEvent.incentive
+                            }
                           },
-                          upsert: true
-                      }
-                  })
-              }
-          }
-      }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
-  }
-}
+                          { upsert: true }
+                    )
+                    break
+                }
 
-export async function getRedemptionRecord(
-  ctx: DataHandlerContext<Db, {
-    block: {
-        timestamp: true;
-    };
-    extrinsic: {
-        hash: true;
-    };
-  }>): Promise<void> {
-  console.log('GETTING REDEMPTION RECORDS')
-  const collection = ctx.store.collection('unlock_redeems')
-  const bulkOps = []
-  for (const block of ctx.blocks) {
-      assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
-      for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
-              assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
-              const decodedEvent = vault.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'UnlockRedeemed') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
-                              $set: {
-                                  id: event.id,
-                                  staker:decodedEvent.staker,
-                                  unlock_id:decodedEvent.unlockId.toString()
-                              }
+                case 'FeesWithdrawn': {
+                    const collection = ctx.store.collection('fees_withdrawn')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                shares: decodedEvent.shares
+                            }
                           },
-                          upsert: true
-                      }
-                  })
+                          { upsert: true }
+                    )
+                    break
+                }
+
+                case 'FeesAdjusted': {
+                    const collection = ctx.store.collection('fees_adjusted')
+                    collection.updateOne(
+                        { id: event.id },
+                        { 
+                            $set: {
+                                id: event.id,
+                                new_fee: decodedEvent.newFee
+                            }
+                          },
+                          { upsert: true }
+                    )
+                    break
+                }
               }
           }
       }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
   }
 }
 
@@ -245,7 +184,7 @@ export async function getTransferRecords(
   for (const block of ctx.blocks) {
       assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
       for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === CONTRACT_ADDRESS) {
+          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === VAULT_CONTRACT_ADDRESS) {
               assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
               const decodedEvent = erc20.decodeEvent(event.args.data)
               if (decodedEvent.__kind === 'Transfer') {
