@@ -18,6 +18,7 @@ const httpServer = http.createServer(app)
 const startApolloServer = async(app: Express, httpServer: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>) => {
   await connectToDatabase()
 
+  // https://the-guild.dev/graphql/codegen/docs/getting-started#to-the-back-end
   const server = new ApolloServer({
     typeDefs: TYPE_DEFS,
     resolvers: RESOLVERS,
