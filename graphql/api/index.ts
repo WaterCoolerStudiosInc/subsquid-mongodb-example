@@ -1,35 +1,35 @@
-// api/graphql.ts
+import { ApolloServer } from 'apollo-server-express'
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
+import http from 'http'
+import express from 'express'
+import cors from 'cors'
+import { connectToDatabase } from './database'
+import { Express } from 'express-serve-static-core'
+import { TYPE_DEFS } from './type-defs/type-defs'
+import { RESOLVERS } from './resolvers/resolvers'
 
-import { ApolloServer } from 'apollo-server-micro';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { connectToDatabase } from '../src/database';
-import { TYPE_DEFS } from '../src/type-defs/type-defs';
-import { RESOLVERS } from '../src/resolvers/resolvers';
-import Cors from 'micro-cors';
+export const app = express()
 
-const cors = Cors();
+app.use(cors())
+app.use(express.json())
 
-const server = new ApolloServer({
-  typeDefs: TYPE_DEFS,
-  resolvers: RESOLVERS,
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-});
+const httpServer = http.createServer(app)
 
-const startServer = server.start();
+const startApolloServer = async(app: Express, httpServer: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>) => {
+  await connectToDatabase()
 
-export default cors(async (req, res) => {
-  if (req.method === 'OPTIONS') {
-    res.end();
-    return;
-  }
+  const server = new ApolloServer({
+    typeDefs: TYPE_DEFS,
+    resolvers: RESOLVERS,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), ApolloServerPluginLandingPageGraphQLPlayground()],
+  })
 
-  await startServer;
-  await connectToDatabase(); // Connect to your database here
-  return server.createHandler({ path: '/api/graphql' })(req, res);
-});
+  await server.start()
+  server.applyMiddleware({ path: '/graphql', app })
+}
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+startApolloServer(app, httpServer)
+
+app.listen(process.env.PORT || 4000, () => console.info('Server started'))
+
+export default httpServer
