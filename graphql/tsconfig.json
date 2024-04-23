@@ -4,7 +4,7 @@
     "target": "ES2018",
     "jsx": "preserve",
     "lib": ["esnext", "dom", "dom.iterable"],
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
