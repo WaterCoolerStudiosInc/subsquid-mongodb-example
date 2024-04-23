@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
+    "target": "ES2018",
+    "jsx": "preserve",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "strict": true,
     "esModuleInterop": true,
-    "target": "es2020",
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
     "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "incremental": true
+    "sourceMap": true
   },
-  "include": ["api/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/__mocks__/**/*", "**/__test__/**/*", "**/*.spec.ts"]
 }
