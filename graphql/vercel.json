@@ -3,7 +3,7 @@
 	"version": 2,
 	"scope": "saeris",
   "functions": {
-    "src/index.ts": {
+    "api/index.ts": {
       "maxDuration": 1,
 			"memory": 128
     }
