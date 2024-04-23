@@ -3,10 +3,10 @@ import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQL
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
-import { connectToDatabase } from './database'
+import { connectToDatabase } from '../src/database'
 import { Express } from 'express-serve-static-core'
-import { TYPE_DEFS } from './type-defs/type-defs'
-import { RESOLVERS } from './resolvers/resolvers'
+import { TYPE_DEFS } from '../src/type-defs/type-defs'
+import { RESOLVERS } from '../src/resolvers/resolvers'
 
 export const app = express()
 
