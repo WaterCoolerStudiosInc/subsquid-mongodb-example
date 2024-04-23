@@ -4,12 +4,11 @@
     "module": "CommonJS",
     "lib": ["ESNext", "DOM"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "./src/**/*"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }
