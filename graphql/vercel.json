@@ -1,16 +1,11 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-     
-      
+	"name": "apollo-server-vercel",
+	"version": 2,
+	"scope": "saeris",
+  "functions": {
+    "src/index.ts": {
+      "maxDuration": 1,
+			"memory": 128
     }
-  ],
-  
-  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
-
-
-  
+  }
 }
