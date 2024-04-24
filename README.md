@@ -21,7 +21,7 @@ sqd up
 # 4. Build and run the project
 sqd process
 
-# 5. Build and run the graphql server
+# 5. Build and run the graphql server (used strictly for local testing)
 cd graphql
 npm install
 npm run build

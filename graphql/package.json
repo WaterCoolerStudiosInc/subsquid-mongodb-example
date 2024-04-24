@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "ts-node src/index.ts",
     "build": "rm -rf api && tsc",
     "dev": "ts-node src/index.ts"
   },

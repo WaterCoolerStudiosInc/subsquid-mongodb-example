@@ -47,6 +47,9 @@ export async function startIndexingVault(
                         }, 
                         { upsert: true }
                     )
+                    // update virtual shares with virtual_shares
+                    // subtract spot_value from total_pooled 
+                    // subtract shares from minted shares
                     break
                 }
 
@@ -64,6 +67,10 @@ export async function startIndexingVault(
                           },
                           { upsert: true }
                     )
+
+                    // update total pooled with azero passed in
+                    // update total shares by adding new_shares to current shares as well as adding virtual shares
+                    // lets keep virtual shares seperate
                     break
                 }
 
@@ -132,6 +139,9 @@ export async function startIndexingVault(
                           },
                           { upsert: true }
                     )
+
+                    // update virtual shares with virtual_shares
+                    // add restaked to total_pooled
                     break
                 }
 
@@ -147,6 +157,7 @@ export async function startIndexingVault(
                           },
                           { upsert: true }
                     )
+                    // update virtual shares to 0
                     break
                 }
 
@@ -162,6 +173,7 @@ export async function startIndexingVault(
                           },
                           { upsert: true }
                     )
+                    // update virtual shares
                     break
                 }
               }
