@@ -19,7 +19,7 @@ npm install
 sqd up
 
 # 4. Build and run the project
-sqd process
+npm run start:dev
 
 # 5. Build and run the graphql server (used strictly for local testing)
 cd graphql

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {assertNotNull} from '@subsquid/util-internal'
 import * as ss58 from '@subsquid/ss58'
 import {
@@ -38,9 +39,8 @@ export const processor = new SubstrateBatchProcessor()
         }
     })
     .setBlockRange({
-        // TODO: pass in the earliest contract deployment block we have here, better as env var as its also needed in main.ts
-        // ideally we should automagically read this
-        from: 58879836
+        // TODO: ideally we should automagically read this
+        from: Number(process.env.STARTING_BLOCK) || 1
     })
 
 export type Fields = SubstrateBatchProcessorFields<typeof processor>

@@ -8,7 +8,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - '27017:27017'
+      - 27017:27017
 
   mongo-express:
     image: mongo-express
@@ -20,3 +20,14 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+
+  processor:
+    image: indexer:latest
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: mongodb://root:root@mongo:27017/aleph-indexer?authSource=admin
+    depends_on:
+      - mongo

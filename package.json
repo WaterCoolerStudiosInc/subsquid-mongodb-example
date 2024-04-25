@@ -5,6 +5,7 @@
     "build": "rm -rf lib && tsc",
     "update": "npx npm-check-updates --filter /subsquid/ --upgrade && npm i -f",
     "start": "node lib/main.js",
+    "start:dev": "ts-node src/main.ts",
     "lint": "eslint . --ext .ts --ignore-path .gitignore --ignore-pattern src/abi/**/*  --fix"
   },
   "dependencies": {
@@ -23,15 +24,14 @@
     "dotenv": "^16.3.1",
     "ethers": "^6.8.0",
     "mongodb": "^5.9.2",
-    "mongoose": "^8.3.2",
-    "pg": "8.11.3",
-    "typeorm": "^0.3.17"
+    "mongoose": "^8.3.2"
   },
   "devDependencies": {
     "@subsquid/ink-typegen": "^3.0.4",
     "@subsquid/substrate-metadata-explorer": "^3.1.2",
     "@subsquid/typeorm-codegen": "^2.0.0",
     "@types/node": "^20.8.7",
-    "typescript": "~5.2.2"
+    "typescript": "~5.2.2",
+    "ts-node": "^10.9.2"
   }
 }
