@@ -132,7 +132,7 @@ export async function startIndexingVault(
                         { 
                             $set: {
                                 id: event.id,
-                                caller: decodedEvent.caller,
+                                // caller: decodedEvent.caller,
                                 azero: decodedEvent.azero,
                                 incentive: decodedEvent.incentive
                             }

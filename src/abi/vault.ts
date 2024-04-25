@@ -2,7 +2,7 @@ import {Abi, Bytes, encodeCall, decodeResult} from "@subsquid/ink-abi"
 
 export const metadata = {
   "source": {
-    "hash": "0x295876292954dbec9d4d414eac7cb6ca483a8ffd32c2ae84778ac7163038f234",
+    "hash": "0x1aa555c9ad21114e5eac74ace9c88f45378c63b61f2affac6d74ddcc29c6ea73",
     "language": "ink! 4.3.0",
     "compiler": "rustc 1.75.0",
     "build_info": {
@@ -77,13 +77,13 @@ export const metadata = {
         "displayName": [
           "BlockNumber"
         ],
-        "type": 30
+        "type": 29
       },
       "chainExtension": {
         "displayName": [
           "ChainExtension"
         ],
-        "type": 31
+        "type": 30
       },
       "hash": {
         "displayName": [
@@ -134,17 +134,6 @@ export const metadata = {
               ],
               "type": 4
             }
-          },
-          {
-            "docs": [],
-            "indexed": false,
-            "label": "virtual_shares",
-            "type": {
-              "displayName": [
-                "Balance"
-              ],
-              "type": 4
-            }
           }
         ],
         "docs": [],
@@ -152,17 +141,6 @@ export const metadata = {
       },
       {
         "args": [
-          {
-            "docs": [],
-            "indexed": false,
-            "label": "caller",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 0
-            }
-          },
           {
             "docs": [],
             "indexed": false,
@@ -178,17 +156,6 @@ export const metadata = {
             "docs": [],
             "indexed": false,
             "label": "incentive",
-            "type": {
-              "displayName": [
-                "Balance"
-              ],
-              "type": 4
-            }
-          },
-          {
-            "docs": [],
-            "indexed": false,
-            "label": "virtual_shares",
             "type": {
               "displayName": [
                 "Balance"
@@ -305,12 +272,12 @@ export const metadata = {
           {
             "docs": [],
             "indexed": true,
-            "label": "batch_id",
+            "label": "staker",
             "type": {
               "displayName": [
-                "u64"
+                "AccountId"
               ],
-              "type": 3
+              "type": 0
             }
           },
           {
@@ -327,7 +294,7 @@ export const metadata = {
           {
             "docs": [],
             "indexed": false,
-            "label": "virtual_shares",
+            "label": "spot_value",
             "type": {
               "displayName": [
                 "Balance"
@@ -338,12 +305,12 @@ export const metadata = {
           {
             "docs": [],
             "indexed": false,
-            "label": "spot_value",
+            "label": "batch_id",
             "type": {
               "displayName": [
-                "Balance"
+                "u64"
               ],
-              "type": 4
+              "type": 3
             }
           }
         ],
@@ -428,17 +395,6 @@ export const metadata = {
                 "u16"
               ],
               "type": 7
-            }
-          },
-          {
-            "docs": [],
-            "indexed": false,
-            "label": "virtual_shares",
-            "type": {
-              "displayName": [
-                "Balance"
-              ],
-              "type": 4
             }
           }
         ],
@@ -609,26 +565,25 @@ export const metadata = {
       {
         "args": [
           {
-            "label": "batch_ids",
+            "label": "batch_id",
             "type": {
               "displayName": [
-                "Vec"
+                "u64"
               ],
-              "type": 20
+              "type": 3
             }
           }
         ],
         "default": false,
         "docs": [
-          " Trigger unlock requests of previous batched requests",
-          " Distributes unlock requests to nominators according to current stake imbalances",
-          " Calculates a batch spot values for sAZERO in the batches",
-          " Burns associated sAZERO",
+          " Trigger unlock request of previous two day batched requests",
+          " Distributes unlock request to nominators according to current stake imbalances",
+          " Calculates a batch spot value for sAZERO in the batch",
           "",
-          " Cannot be called for a batch that has not concluded",
+          " Cannot be called until after the requested batch's interval has elapsed",
           " Cannot be called for a batch that has already been redeemed"
         ],
-        "label": "send_batch_unlock_requests",
+        "label": "send_batch_unlock_request",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -638,7 +593,7 @@ export const metadata = {
           ],
           "type": 18
         },
-        "selector": "0xe4ff1655"
+        "selector": "0xc3f98356"
       },
       {
         "args": [
@@ -981,7 +936,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 21
+          "type": 20
         },
         "selector": "0x21fb8e24"
       },
@@ -997,7 +952,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 21
+          "type": 20
         },
         "selector": "0xf5f79633"
       },
@@ -1013,7 +968,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 22
+          "type": 21
         },
         "selector": "0x00fd9450"
       },
@@ -1029,7 +984,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 22
+          "type": 21
         },
         "selector": "0xae0df303"
       },
@@ -1045,7 +1000,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 22
+          "type": 21
         },
         "selector": "0x922019f8"
       },
@@ -1063,7 +1018,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x627954ca"
       },
@@ -1083,7 +1038,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x17e02c67"
       },
@@ -1101,7 +1056,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x32510c64"
       },
@@ -1117,7 +1072,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x25a59cbc"
       },
@@ -1133,7 +1088,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 24
+          "type": 23
         },
         "selector": "0x4fd7eacd"
       },
@@ -1149,7 +1104,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 22
+          "type": 21
         },
         "selector": "0x30bfce5d"
       },
@@ -1165,7 +1120,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 22
+          "type": 21
         },
         "selector": "0x541952c6"
       },
@@ -1193,7 +1148,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x1f61cfde"
       },
@@ -1221,7 +1176,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x46e2b6ac"
       },
@@ -1249,7 +1204,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 25
+          "type": 24
         },
         "selector": "0x713a250d"
       },
@@ -1277,7 +1232,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 22
         },
         "selector": "0x69626047"
       },
@@ -1305,7 +1260,7 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 26
+          "type": 25
         },
         "selector": "0xb09bcd73"
       }
@@ -1955,15 +1910,11 @@ export const metadata = {
               },
               {
                 "index": 2,
-                "name": "NotInitialized"
+                "name": "InvalidWithdraw"
               },
               {
                 "index": 3,
-                "name": "InvalidDeposit"
-              },
-              {
-                "index": 4,
-                "name": "InvalidWithdraw"
+                "name": "InsufficientFunds"
               }
             ]
           }
@@ -2115,16 +2066,6 @@ export const metadata = {
       "id": 20,
       "type": {
         "def": {
-          "sequence": {
-            "type": 3
-          }
-        }
-      }
-    },
-    {
-      "id": 21,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
@@ -2164,7 +2105,7 @@ export const metadata = {
       }
     },
     {
-      "id": 22,
+      "id": 21,
       "type": {
         "def": {
           "variant": {
@@ -2206,7 +2147,7 @@ export const metadata = {
       }
     },
     {
-      "id": 23,
+      "id": 22,
       "type": {
         "def": {
           "variant": {
@@ -2248,7 +2189,7 @@ export const metadata = {
       }
     },
     {
-      "id": 24,
+      "id": 23,
       "type": {
         "def": {
           "variant": {
@@ -2290,7 +2231,7 @@ export const metadata = {
       }
     },
     {
-      "id": 25,
+      "id": 24,
       "type": {
         "def": {
           "variant": {
@@ -2332,7 +2273,7 @@ export const metadata = {
       }
     },
     {
-      "id": 26,
+      "id": 25,
       "type": {
         "def": {
           "variant": {
@@ -2340,7 +2281,7 @@ export const metadata = {
               {
                 "fields": [
                   {
-                    "type": 27
+                    "type": 26
                   }
                 ],
                 "index": 0,
@@ -2361,7 +2302,7 @@ export const metadata = {
         "params": [
           {
             "name": "T",
-            "type": 27
+            "type": 26
           },
           {
             "name": "E",
@@ -2374,19 +2315,19 @@ export const metadata = {
       }
     },
     {
-      "id": 27,
+      "id": 26,
       "type": {
         "def": {
           "tuple": [
             4,
-            28,
-            29
+            27,
+            28
           ]
         }
       }
     },
     {
-      "id": 28,
+      "id": 27,
       "type": {
         "def": {
           "variant": {
@@ -2419,7 +2360,7 @@ export const metadata = {
       }
     },
     {
-      "id": 29,
+      "id": 28,
       "type": {
         "def": {
           "variant": {
@@ -2452,7 +2393,7 @@ export const metadata = {
       }
     },
     {
-      "id": 30,
+      "id": 29,
       "type": {
         "def": {
           "primitive": "u32"
@@ -2460,7 +2401,7 @@ export const metadata = {
       }
     },
     {
-      "id": 31,
+      "id": 30,
       "type": {
         "def": {
           "variant": {}
@@ -2608,7 +2549,7 @@ export interface Constructor_new {
 
 export type Hash = Bytes
 
-export type Message = Message_adjust_fee | Message_adjust_minimum_stake | Message_cancel_unlock_request | Message_delegate_withdraw_unbonded | Message_get_azero_from_shares | Message_get_batch_id | Message_get_batch_unlock_requests | Message_get_creation_time | Message_get_current_virtual_shares | Message_get_fee_percentage | Message_get_minimum_stake | Message_get_registry_contract | Message_get_role_adjust_fee | Message_get_role_adjust_fee_admin | Message_get_role_owner | Message_get_share_token_contract | Message_get_shares_from_azero | Message_get_total_pooled | Message_get_total_shares | Message_get_unlock_request_count | Message_get_unlock_requests | Message_redeem | Message_redeem_with_withdraw | Message_request_unlock | Message_restake | Message_send_batch_unlock_requests | Message_set_code | Message_stake | Message_transfer_role_adjust_fee | Message_transfer_role_adjust_fee_admin | Message_transfer_role_owner | Message_withdraw_fees
+export type Message = Message_adjust_fee | Message_adjust_minimum_stake | Message_cancel_unlock_request | Message_delegate_withdraw_unbonded | Message_get_azero_from_shares | Message_get_batch_id | Message_get_batch_unlock_requests | Message_get_creation_time | Message_get_current_virtual_shares | Message_get_fee_percentage | Message_get_minimum_stake | Message_get_registry_contract | Message_get_role_adjust_fee | Message_get_role_adjust_fee_admin | Message_get_role_owner | Message_get_share_token_contract | Message_get_shares_from_azero | Message_get_total_pooled | Message_get_total_shares | Message_get_unlock_request_count | Message_get_unlock_requests | Message_redeem | Message_redeem_with_withdraw | Message_request_unlock | Message_restake | Message_send_batch_unlock_request | Message_set_code | Message_stake | Message_transfer_role_adjust_fee | Message_transfer_role_adjust_fee_admin | Message_transfer_role_owner | Message_withdraw_fees
 
 /**
  *  ======================== Restricted Functions: Adjust Fee Role ========================
@@ -2801,17 +2742,16 @@ export interface Message_restake {
 }
 
 /**
- *  Trigger unlock requests of previous batched requests
- *  Distributes unlock requests to nominators according to current stake imbalances
- *  Calculates a batch spot values for sAZERO in the batches
- *  Burns associated sAZERO
+ *  Trigger unlock request of previous two day batched requests
+ *  Distributes unlock request to nominators according to current stake imbalances
+ *  Calculates a batch spot value for sAZERO in the batch
  * 
- *  Cannot be called for a batch that has not concluded
+ *  Cannot be called until after the requested batch's interval has elapsed
  *  Cannot be called for a batch that has already been redeemed
  */
-export interface Message_send_batch_unlock_requests {
-    __kind: 'send_batch_unlock_requests'
-    batchIds: u64[]
+export interface Message_send_batch_unlock_request {
+    __kind: 'send_batch_unlock_request'
+    batchId: u64
 }
 
 /**
@@ -2883,16 +2823,15 @@ export type Event = Event_BatchUnlockSent | Event_FeesAdjusted | Event_FeesWithd
 
 export interface Event_BatchUnlockSent {
     __kind: 'BatchUnlockSent'
-    batchId: u64
+    staker: AccountId
     shares: bigint
-    virtualShares: bigint
     spotValue: bigint
+    batchId: u64
 }
 
 export interface Event_FeesAdjusted {
     __kind: 'FeesAdjusted'
     newFee: u16
-    virtualShares: bigint
 }
 
 export interface Event_FeesWithdrawn {
@@ -2912,10 +2851,8 @@ export interface Event_OwnershipTransferred {
 
 export interface Event_Restaked {
     __kind: 'Restaked'
-    caller: AccountId
     azero: bigint
     incentive: bigint
-    virtualShares: bigint
 }
 
 export interface Event_RoleSetFeesAdminTransferred {
@@ -2933,7 +2870,6 @@ export interface Event_Staked {
     staker: AccountId
     azero: bigint
     newShares: bigint
-    virtualShares: bigint
 }
 
 export interface Event_UnlockCanceled {
