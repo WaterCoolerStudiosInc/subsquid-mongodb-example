@@ -15,19 +15,16 @@ npm i -g @subsquid/cli
 # 1. Install dependencies
 npm install
 
-# 3. Start the mongo db via docker (make sure docker is running first)
+# 3. Start the app and db via docker (make sure docker is running first)
 sqd up
 
-# 4. Build and run the project
-sqd process
-
-# 5. Build and run the graphql server
+# 5. Build and run the graphql server (used strictly for local testing)
 cd graphql
 npm install
 npm run build
 npm run dev
 
-# The database can be reset via
+# The app/database can be reset via
 sqd down
 
 ```
@@ -45,3 +42,5 @@ When changing the variables stored to the database within main.ts, we must also 
 - Subsquid gateways for aleph zero can be found at:
   https://v2.archive.subsquid.io/network/aleph-zero
   https://v2.archive.subsquid.io/network/aleph-zero-testnet
+
+- ABI json files should be located at the top level abi folder. You should generate new ts models after updating the contract. That can be done like so `npx squid-ink-typegen --abi abi/vault.json --output src/abi/vault.ts`
