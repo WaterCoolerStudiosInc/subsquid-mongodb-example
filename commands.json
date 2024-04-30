@@ -11,11 +11,11 @@
       "cmd": ["tsc"]
     },
     "up": {
-      "description": "Start the database",
+      "description": "Start the app and database with docker",
       "cmd": ["docker", "compose", "up", "-d"]
     },
     "down": {
-      "description": "Drop the database",
+      "description": "Stop/drop the app and database with docker",
       "cmd": ["docker", "compose", "down"]
     },
     "process": {
