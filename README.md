@@ -15,11 +15,8 @@ npm i -g @subsquid/cli
 # 1. Install dependencies
 npm install
 
-# 3. Start the mongo db via docker (make sure docker is running first)
+# 3. Start the app and db via docker (make sure docker is running first)
 sqd up
-
-# 4. Build and run the project
-npm run start:dev
 
 # 5. Build and run the graphql server (used strictly for local testing)
 cd graphql
@@ -27,7 +24,7 @@ npm install
 npm run build
 npm run dev
 
-# The database can be reset via
+# The app/database can be reset via
 sqd down
 
 ```

@@ -31,3 +31,4 @@ services:
       DB_URL: mongodb://root:root@mongo:27017/aleph-indexer?authSource=admin
     depends_on:
       - mongo
+      - mongo-express
