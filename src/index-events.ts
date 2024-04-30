@@ -1,10 +1,6 @@
 import assert from 'assert'
-import * as ss58 from '@subsquid/ss58'
-
-import * as erc20 from './abi/erc20'
 import * as vault from './abi/vault'
 import {
-  SS58_NETWORK,
   VAULT_CONTRACT_ADDRESS,
 } from './processor'
 import { DataHandlerContext } from '@subsquid/substrate-processor'
@@ -339,46 +335,46 @@ function subAnalyticsValues(oldAnalytics: Analytics, analyticsChange: AnalyticsC
     } as Analytics
 }
 
-export async function getTransferRecords(
-  ctx: DataHandlerContext<Db, {
-    block: {
-        timestamp: true;
-    };
-    extrinsic: {
-        hash: true;
-    };
-  }>): Promise<void> {
-  const collection = ctx.store.collection('transfers')
-  const bulkOps = []
-  for (const block of ctx.blocks) {
-      assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
-      for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === VAULT_CONTRACT_ADDRESS) {
-              assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
-              const decodedEvent = erc20.decodeEvent(event.args.data)
-              if (decodedEvent.__kind === 'Transfer') {
-                  bulkOps.push({
-                      updateOne: {
-                          filter: { id: event.id },
-                          update: { 
-                              $set: {
-                                  id: event.id,
-                                  from: decodedEvent.from && ss58.codec(SS58_NETWORK).encode(decodedEvent.from),
-                                  to: decodedEvent.to && ss58.codec(SS58_NETWORK).encode(decodedEvent.to),
-                                  amount: decodedEvent.value.toString(),
-                                  block: block.header.height,
-                                  timestamp: block.header.timestamp,
-                                  extrinsicHash: event.extrinsic.hash
-                              }
-                          },
-                          upsert: true
-                      }
-                  })
-              }
-          }
-      }
-  }
-  if(bulkOps.length > 0){
-      await collection.bulkWrite(bulkOps)
-  }
-}
+// export async function getTransferRecords(
+//   ctx: DataHandlerContext<Db, {
+//     block: {
+//         timestamp: true;
+//     };
+//     extrinsic: {
+//         hash: true;
+//     };
+//   }>): Promise<void> {
+//   const collection = ctx.store.collection('transfers')
+//   const bulkOps = []
+//   for (const block of ctx.blocks) {
+//       assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
+//       for (const event of block.events) {
+//           if (event.name === 'Contracts.ContractEmitted' && event.args.contract === VAULT_CONTRACT_ADDRESS) {
+//               assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
+//               const decodedEvent = erc20.decodeEvent(event.args.data)
+//               if (decodedEvent.__kind === 'Transfer') {
+//                   bulkOps.push({
+//                       updateOne: {
+//                           filter: { id: event.id },
+//                           update: { 
+//                               $set: {
+//                                   id: event.id,
+//                                   from: decodedEvent.from && ss58.codec(SS58_NETWORK).encode(decodedEvent.from),
+//                                   to: decodedEvent.to && ss58.codec(SS58_NETWORK).encode(decodedEvent.to),
+//                                   amount: decodedEvent.value.toString(),
+//                                   block: block.header.height,
+//                                   timestamp: block.header.timestamp,
+//                                   extrinsicHash: event.extrinsic.hash
+//                               }
+//                           },
+//                           upsert: true
+//                       }
+//                   })
+//               }
+//           }
+//       }
+//   }
+//   if(bulkOps.length > 0){
+//       await collection.bulkWrite(bulkOps)
+//   }
+// }
