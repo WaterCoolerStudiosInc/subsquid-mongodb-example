@@ -7,6 +7,7 @@ export const TRANSFERS_TYPE_DEFS = gql`
 
   type Transfers {
     id: ID!
+    event_id: String!
     from: String!
     to: String!
     amount: String!

@@ -2,9 +2,11 @@
 import mongoose from 'mongoose'
 
 const UnlockRedeemsSchema = new mongoose.Schema({
-  id: {type: String},
+  event_id: {type: String},
   staker: {type: String},
-  unlock_id: {type: String}
+  unlock_id: {type: String},
+  timestamp: {type: Number},
+  block: {type: Number},
 })
 
 export const UnlockRedeemsModel = mongoose.model('unlock_redeems', UnlockRedeemsSchema)

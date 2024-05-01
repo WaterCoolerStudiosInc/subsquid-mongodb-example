@@ -23,8 +23,7 @@ export const processor = new SubstrateBatchProcessor()
 
     .setGateway(GATEWAY_URL)
     .setRpcEndpoint({
-        url: assertNotNull(process.env.RPC_ENDPOINT),
-        rateLimit: 10
+        url: assertNotNull(process.env.RPC_ENDPOINT)
     })
     .addContractsContractEmitted({
         contractAddress: [VAULT_CONTRACT_ADDRESS],
