@@ -13,5 +13,4 @@ const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
 processor.run(mongoDB, async ctx => {
     console.log("PROCESSING LOOP")
     await startIndexingVault(ctx)
-    // await getTransferRecords(ctx)
 })
