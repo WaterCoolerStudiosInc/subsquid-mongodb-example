@@ -29,20 +29,25 @@ export async function startIndexingVault(
               switch (decodedEvent.__kind) {
                 case 'BatchUnlockSent' : {
                     const collection = ctx.store.collection('batch_unlocks')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                shares: decodedEvent.shares.toString(),
-                                spot_value: decodedEvent.spotValue.toString(),
-                                batch_id: decodedEvent.batchId.toString(),
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                        }, 
-                        { upsert: true }
-                    )
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    shares: decodedEvent.shares.toString(),
+                                    spot_value: decodedEvent.spotValue.toString(),
+                                    batch_id: decodedEvent.batchId.toString(),
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                            }, 
+                            { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
 
                     /* 
                         update virtual shares with virtual_shares
@@ -62,21 +67,26 @@ export async function startIndexingVault(
 
                 case 'Staked': {
                     const collection = ctx.store.collection('stakes')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                              $set: {
-                                  id: event.id,
-                                  staker:decodedEvent.staker,
-                                  azero:decodedEvent.azero.toString(),
-                                  newShares:decodedEvent.newShares.toString(),  
-                                  timestamp: block.header.timestamp,
-                                  block: block.header.height
-                              } 
-                          },
-                          { upsert: true }
-                    )
-
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                  $set: {
+                                      event_id: event.id,
+                                      staker:decodedEvent.staker,
+                                      azero:decodedEvent.azero.toString(),
+                                      newShares:decodedEvent.newShares.toString(),  
+                                      timestamp: block.header.timestamp,
+                                      block: block.header.height
+                                  } 
+                              },
+                              { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+                    
                     /* 
                         add to total pooled with azero passed in
                         add to minted shares with new_shares
@@ -95,76 +105,103 @@ export async function startIndexingVault(
 
                 case 'UnlockRequested': {
                     const collection = ctx.store.collection('unlock_requests')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                staker:decodedEvent.staker,
-                                shares:decodedEvent.shares.toString(),
-                                batch_id:decodedEvent.batchId.toString(),
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                        },
-                        { upsert: true }
-                    )
+
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    staker:decodedEvent.staker,
+                                    shares:decodedEvent.shares.toString(),
+                                    batch_id:decodedEvent.batchId.toString(),
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                            },
+                            { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+
                     break
                 }
 
                 case 'UnlockCanceled': {
                     const collection = ctx.store.collection('unlock_cancels')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                staker:decodedEvent.staker,
-                                shares:decodedEvent.shares.toString(),
-                                batch_id:decodedEvent.batchId.toString(),
-                                unlock_id:decodedEvent.unlockId.toString(),
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                        },
-                        { upsert: true }
-                    )
+
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    staker:decodedEvent.staker,
+                                    shares:decodedEvent.shares.toString(),
+                                    batch_id:decodedEvent.batchId.toString(),
+                                    unlock_id:decodedEvent.unlockId.toString(),
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                            },
+                            { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+
                     break
                 }
 
                 case 'UnlockRedeemed': {
                     const collection = ctx.store.collection('unlock_redeems')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                staker:decodedEvent.staker,
-                                unlock_id:decodedEvent.unlockId.toString(),
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                          },
-                          { upsert: true }
-                    )
+
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    staker:decodedEvent.staker,
+                                    unlock_id:decodedEvent.unlockId.toString(),
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                              },
+                              { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+
                     break
                 }
 
                 case 'Restaked': {
                     const collection = ctx.store.collection('restakes')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                azero: decodedEvent.azero,
-                                incentive: decodedEvent.incentive,
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                          },
-                          { upsert: true }
-                    )
+                    
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    azero: decodedEvent.azero,
+                                    incentive: decodedEvent.incentive,
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                              },
+                              { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
 
                     /* 
                         update virtual shares with virtual_shares
@@ -183,18 +220,25 @@ export async function startIndexingVault(
 
                 case 'FeesWithdrawn': {
                     const collection = ctx.store.collection('fees_withdrawn')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                shares: decodedEvent.shares,
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                          },
-                          { upsert: true }
-                    )
+
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    shares: decodedEvent.shares,
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                              },
+                              { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+
                     /* 
                         update virtual shares to 0
                     */
@@ -211,18 +255,25 @@ export async function startIndexingVault(
 
                 case 'FeesAdjusted': {
                     const collection = ctx.store.collection('fees_adjusted')
-                    await collection.updateOne(
-                        { id: event.id },
-                        { 
-                            $set: {
-                                id: event.id,
-                                new_fee: decodedEvent.newFee,
-                                timestamp: block.header.timestamp,
-                                block: block.header.height
-                            }
-                          },
-                          { upsert: true }
-                    )
+
+                    try {
+                        await collection.updateOne(
+                            { event_id: event.id },
+                            { 
+                                $set: {
+                                    event_id: event.id,
+                                    new_fee: decodedEvent.newFee,
+                                    timestamp: block.header.timestamp,
+                                    block: block.header.height
+                                }
+                              },
+                              { upsert: true }
+                        )
+                    } catch (error) {
+                        console.error(`Failed to update collection for event ${decodedEvent.__kind} \n ${error}`)
+                        throw error
+                    }
+
                     /* 
                         update virtual shares
                     */
@@ -236,6 +287,9 @@ export async function startIndexingVault(
                         } as AnalyticsChange)
                     break
                 }
+                default:
+                    console.log(`Unhandled event type: ${decodedEvent.__kind}`);
+                    break;
               }
           }
       }
@@ -270,6 +324,8 @@ async function updateAnalytics(collection: Collection<Document>, newAnalytics: A
             timestamp: newAnalytics.timestamp,
             block: newAnalytics.block
         }
+        console.log(`Document for block ${newAnalytics.block} exists`)
+
     } else {
         // Find the document with the closest lower block number, and create a copy for the new block else, create a new empty doc
         const prevDocument = await collection.findOne({ block: { $lt: newAnalytics.block } }, { sort: { block: -1 } }) as any
@@ -282,6 +338,7 @@ async function updateAnalytics(collection: Collection<Document>, newAnalytics: A
                 timestamp: newAnalytics.timestamp,
                 block: newAnalytics.block
             }
+            console.log(`Document for block ${newAnalytics.block} doesnt exist but grabbing previous block doc ${prevDocument.block}`)
         }
     }
 
@@ -289,26 +346,32 @@ async function updateAnalytics(collection: Collection<Document>, newAnalytics: A
         addAnalyticsValues(analytics, newAnalytics) : 
         subAnalyticsValues(analytics, newAnalytics)
 
-        await await collection.updateOne(
-            { block: toUpdate.block },
-            { 
-                $set: {
-                    total_shares: toUpdate.totalShares,
-                    minted_shares: toUpdate.mintedShares,
-                    virtual_shares: toUpdate.virtualShares,
-                    total_pooled: toUpdate.totalPooled,
-                    timestamp: toUpdate.timestamp,
-                    block: toUpdate.block
-                }
-            }, 
-            { upsert: true }
-        )
+        try {
+            await collection.updateOne(
+                { block: toUpdate.block },
+                { 
+                    $set: {
+                        total_shares: toUpdate.totalShares,
+                        minted_shares: toUpdate.mintedShares,
+                        virtual_shares: toUpdate.virtualShares,
+                        total_pooled: toUpdate.totalPooled,
+                        timestamp: toUpdate.timestamp,
+                        block: toUpdate.block
+                    }
+                }, 
+                { upsert: true }
+            )
+        } catch (error) {
+            console.error("Failed to update analytics:", error)
+            throw error
+        }
 }
 
 // Adds two analytics objects together
 // Virtual shares, timestamp and block should always be set to the newest value
 function addAnalyticsValues(oldAnalytics: Analytics, analyticsChange: AnalyticsChange) : Analytics {
     const totalMintedShares = addStrings(oldAnalytics.mintedShares, analyticsChange.changeInMintedShares)
+    console.log(`Adding analytics, \n Previous value: \n ${JSON.stringify(oldAnalytics)} \n Change: \n ${JSON.stringify(analyticsChange)}`)
 
     return {
         totalShares: addStrings(totalMintedShares, analyticsChange.virtualShares),
@@ -324,6 +387,7 @@ function addAnalyticsValues(oldAnalytics: Analytics, analyticsChange: AnalyticsC
 // Virtual shares, timestamp and block should always be set to the newest value
 function subAnalyticsValues(oldAnalytics: Analytics, analyticsChange: AnalyticsChange) :  Analytics {
     const totalMintedShares = subtractStrings(oldAnalytics.mintedShares, analyticsChange.changeInMintedShares)
+    console.log(`Subtracting analytics, \n Previous value: \n ${JSON.stringify(oldAnalytics)} \n Change: \n ${JSON.stringify(analyticsChange)}`)
 
     return {
         totalShares: addStrings(totalMintedShares, analyticsChange.virtualShares),

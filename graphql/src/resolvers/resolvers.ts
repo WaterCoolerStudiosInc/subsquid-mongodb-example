@@ -1,3 +1,4 @@
+import { AnalyticsResolver } from "./analytics-resolver"
 import { BatchUnlocksResolver } from "./batch-unlocks-resolver"
 import { StakeResolver } from "./stakes-resolver"
 import { TransfersResolver } from "./transfers-resolver"
@@ -11,5 +12,6 @@ export const RESOLVERS = [
   TransfersResolver,
   UnlockCancelsResolver,
   UnlockRedeemsResolver,
-  UnlockRequestResolver
+  UnlockRequestResolver,
+  AnalyticsResolver
 ]

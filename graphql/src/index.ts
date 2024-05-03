@@ -22,7 +22,7 @@ const startApolloServer = async(app: Express, httpServer: http.Server<typeof htt
   const server = new ApolloServer({
     typeDefs: TYPE_DEFS,
     resolvers: RESOLVERS,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), ApolloServerPluginLandingPageGraphQLPlayground()],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
   await server.start()
