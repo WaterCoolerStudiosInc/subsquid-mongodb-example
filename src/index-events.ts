@@ -181,8 +181,8 @@ export async function startIndexingVault(
                     break
                 }
 
-                case 'Restaked': {
-                    const collection = ctx.store.collection('restakes')
+                case 'Compounded': {
+                    const collection = ctx.store.collection('compounds')
                     
                     try {
                         await collection.updateOne(

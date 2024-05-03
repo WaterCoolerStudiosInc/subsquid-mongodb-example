@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x295876292954dbec9d4d414eac7cb6ca483a8ffd32c2ae84778ac7163038f234",
+    "hash": "0x17bad81d1e59e262150da35e00ad7523fc185e75204283c2c8ebe2bde2b08705",
     "language": "ink! 4.3.0",
     "compiler": "rustc 1.75.0",
     "build_info": {
@@ -17,7 +17,8 @@
     "name": "vault",
     "version": "0.1.0",
     "authors": [
-      "[your_name] <[your_email]>"
+      "Brandon <brandon@kintsu.xyz>",
+      "John <john@kintsu.xyz"
     ]
   },
   "spec": {
@@ -55,6 +56,49 @@
           "type": 9
         },
         "selector": "0x9bae9d5e"
+      },
+      {
+        "args": [
+          {
+            "label": "share_token_hash",
+            "type": {
+              "displayName": [
+                "Hash"
+              ],
+              "type": 8
+            }
+          },
+          {
+            "label": "registry_code_hash",
+            "type": {
+              "displayName": [
+                "Hash"
+              ],
+              "type": 8
+            }
+          },
+          {
+            "label": "era",
+            "type": {
+              "displayName": [
+                "u64"
+              ],
+              "type": 3
+            }
+          }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "custom_era",
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink_primitives",
+            "ConstructorResult"
+          ],
+          "type": 9
+        },
+        "selector": "0x962be16d"
       }
     ],
     "docs": [],
@@ -75,13 +119,13 @@
         "displayName": [
           "BlockNumber"
         ],
-        "type": 30
+        "type": 35
       },
       "chainExtension": {
         "displayName": [
           "ChainExtension"
         ],
-        "type": 31
+        "type": 36
       },
       "hash": {
         "displayName": [
@@ -196,7 +240,7 @@
           }
         ],
         "docs": [],
-        "label": "Restaked"
+        "label": "Compounded"
       },
       {
         "args": [
@@ -558,7 +602,7 @@
         "docs": [
           " Allow user to begin the unlock process",
           " Transfers sAZERO specified in `shares` argument to the vault contract",
-          " Unlock is batched into current two day batch request",
+          " Unlock is batched into current two era batch request",
           "",
           " Caller must approve the psp22 token contract beforehand"
         ],
@@ -637,6 +681,24 @@
           "type": 18
         },
         "selector": "0xe4ff1655"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [
+          " Attempts to claim unbonded AZERO from all validators"
+        ],
+        "label": "delegate_withdraw_unbonded",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 18
+        },
+        "selector": "0x7787b52e"
       },
       {
         "args": [
@@ -725,30 +787,12 @@
         "args": [],
         "default": false,
         "docs": [
-          " Attempts to claim unbonded AZERO from all validators"
-        ],
-        "label": "delegate_withdraw_unbonded",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x7787b52e"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [
-          " Restake earned interest for all validators",
+          " Compound earned interest for all validators",
           "",
           " Can be called by anyone",
-          " Caller earns a fee of 1/1000 of restaked interest as defined by the Agent"
+          " Caller earns a fee of 1/1000 of compounded amount as defined by the Agent"
         ],
-        "label": "restake",
+        "label": "compound",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -756,9 +800,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 12
         },
-        "selector": "0x47b55b8a"
+        "selector": "0x2f295e28"
       },
       {
         "args": [],
@@ -1306,6 +1350,32 @@
           "type": 26
         },
         "selector": "0xb09bcd73"
+      },
+      {
+        "args": [
+          {
+            "label": "total_pooled",
+            "type": {
+              "displayName": [
+                "u128"
+              ],
+              "type": 4
+            }
+          }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "get_weight_imbalances",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 30
+        },
+        "selector": "0xc8e000f1"
       }
     ]
   },
@@ -1883,6 +1953,22 @@
               },
               {
                 "index": 6,
+                "name": "ZeroDepositing"
+              },
+              {
+                "index": 7,
+                "name": "ZeroUnbonding"
+              },
+              {
+                "index": 8,
+                "name": "ZeroTotalWeight"
+              },
+              {
+                "index": 9,
+                "name": "ZeroCompounding"
+              },
+              {
+                "index": 10,
                 "name": "MinimumStake"
               },
               {
@@ -1892,7 +1978,7 @@
                     "typeName": "String"
                   }
                 ],
-                "index": 7,
+                "index": 11,
                 "name": "InkEnvError"
               },
               {
@@ -1902,7 +1988,7 @@
                     "typeName": "RuntimeError"
                   }
                 ],
-                "index": 8,
+                "index": 12,
                 "name": "InternalError"
               },
               {
@@ -1912,11 +1998,11 @@
                     "typeName": "PSP22Error"
                   }
                 ],
-                "index": 9,
+                "index": 13,
                 "name": "TokenError"
               },
               {
-                "index": 10,
+                "index": 14,
                 "name": "InternalTokenError"
               }
             ]
@@ -1950,25 +2036,13 @@
               {
                 "index": 1,
                 "name": "Unauthorized"
-              },
-              {
-                "index": 2,
-                "name": "NotInitialized"
-              },
-              {
-                "index": 3,
-                "name": "InvalidDeposit"
-              },
-              {
-                "index": 4,
-                "name": "InvalidWithdraw"
               }
             ]
           }
         },
         "path": [
           "vault",
-          "utils",
+          "nomination_agent_utils",
           "RuntimeError"
         ]
       }
@@ -2453,12 +2527,96 @@
       "id": 30,
       "type": {
         "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 31
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 31
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "type": {
+        "def": {
+          "tuple": [
+            4,
+            4,
+            4,
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "id": 32,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 4
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 34
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "type": {
+        "def": {
+          "primitive": "i128"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "type": {
+        "def": {
           "primitive": "u32"
         }
       }
     },
     {
-      "id": 31,
+      "id": 36,
       "type": {
         "def": {
           "variant": {}

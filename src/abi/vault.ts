@@ -2,7 +2,7 @@ import {Abi, Bytes, encodeCall, decodeResult} from "@subsquid/ink-abi"
 
 export const metadata = {
   "source": {
-    "hash": "0x295876292954dbec9d4d414eac7cb6ca483a8ffd32c2ae84778ac7163038f234",
+    "hash": "0x17bad81d1e59e262150da35e00ad7523fc185e75204283c2c8ebe2bde2b08705",
     "language": "ink! 4.3.0",
     "compiler": "rustc 1.75.0",
     "build_info": {
@@ -19,7 +19,8 @@ export const metadata = {
     "name": "vault",
     "version": "0.1.0",
     "authors": [
-      "[your_name] <[your_email]>"
+      "Brandon <brandon@kintsu.xyz>",
+      "John <john@kintsu.xyz"
     ]
   },
   "spec": {
@@ -57,6 +58,49 @@ export const metadata = {
           "type": 9
         },
         "selector": "0x9bae9d5e"
+      },
+      {
+        "args": [
+          {
+            "label": "share_token_hash",
+            "type": {
+              "displayName": [
+                "Hash"
+              ],
+              "type": 8
+            }
+          },
+          {
+            "label": "registry_code_hash",
+            "type": {
+              "displayName": [
+                "Hash"
+              ],
+              "type": 8
+            }
+          },
+          {
+            "label": "era",
+            "type": {
+              "displayName": [
+                "u64"
+              ],
+              "type": 3
+            }
+          }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "custom_era",
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink_primitives",
+            "ConstructorResult"
+          ],
+          "type": 9
+        },
+        "selector": "0x962be16d"
       }
     ],
     "docs": [],
@@ -77,13 +121,13 @@ export const metadata = {
         "displayName": [
           "BlockNumber"
         ],
-        "type": 30
+        "type": 35
       },
       "chainExtension": {
         "displayName": [
           "ChainExtension"
         ],
-        "type": 31
+        "type": 36
       },
       "hash": {
         "displayName": [
@@ -198,7 +242,7 @@ export const metadata = {
           }
         ],
         "docs": [],
-        "label": "Restaked"
+        "label": "Compounded"
       },
       {
         "args": [
@@ -560,7 +604,7 @@ export const metadata = {
         "docs": [
           " Allow user to begin the unlock process",
           " Transfers sAZERO specified in `shares` argument to the vault contract",
-          " Unlock is batched into current two day batch request",
+          " Unlock is batched into current two era batch request",
           "",
           " Caller must approve the psp22 token contract beforehand"
         ],
@@ -639,6 +683,24 @@ export const metadata = {
           "type": 18
         },
         "selector": "0xe4ff1655"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [
+          " Attempts to claim unbonded AZERO from all validators"
+        ],
+        "label": "delegate_withdraw_unbonded",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 18
+        },
+        "selector": "0x7787b52e"
       },
       {
         "args": [
@@ -727,30 +789,12 @@ export const metadata = {
         "args": [],
         "default": false,
         "docs": [
-          " Attempts to claim unbonded AZERO from all validators"
-        ],
-        "label": "delegate_withdraw_unbonded",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x7787b52e"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [
-          " Restake earned interest for all validators",
+          " Compound earned interest for all validators",
           "",
           " Can be called by anyone",
-          " Caller earns a fee of 1/1000 of restaked interest as defined by the Agent"
+          " Caller earns a fee of 1/1000 of compounded amount as defined by the Agent"
         ],
-        "label": "restake",
+        "label": "compound",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -758,9 +802,9 @@ export const metadata = {
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 12
         },
-        "selector": "0x47b55b8a"
+        "selector": "0x2f295e28"
       },
       {
         "args": [],
@@ -1308,6 +1352,32 @@ export const metadata = {
           "type": 26
         },
         "selector": "0xb09bcd73"
+      },
+      {
+        "args": [
+          {
+            "label": "total_pooled",
+            "type": {
+              "displayName": [
+                "u128"
+              ],
+              "type": 4
+            }
+          }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "get_weight_imbalances",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 30
+        },
+        "selector": "0xc8e000f1"
       }
     ]
   },
@@ -1885,6 +1955,22 @@ export const metadata = {
               },
               {
                 "index": 6,
+                "name": "ZeroDepositing"
+              },
+              {
+                "index": 7,
+                "name": "ZeroUnbonding"
+              },
+              {
+                "index": 8,
+                "name": "ZeroTotalWeight"
+              },
+              {
+                "index": 9,
+                "name": "ZeroCompounding"
+              },
+              {
+                "index": 10,
                 "name": "MinimumStake"
               },
               {
@@ -1894,7 +1980,7 @@ export const metadata = {
                     "typeName": "String"
                   }
                 ],
-                "index": 7,
+                "index": 11,
                 "name": "InkEnvError"
               },
               {
@@ -1904,7 +1990,7 @@ export const metadata = {
                     "typeName": "RuntimeError"
                   }
                 ],
-                "index": 8,
+                "index": 12,
                 "name": "InternalError"
               },
               {
@@ -1914,11 +2000,11 @@ export const metadata = {
                     "typeName": "PSP22Error"
                   }
                 ],
-                "index": 9,
+                "index": 13,
                 "name": "TokenError"
               },
               {
-                "index": 10,
+                "index": 14,
                 "name": "InternalTokenError"
               }
             ]
@@ -1952,25 +2038,13 @@ export const metadata = {
               {
                 "index": 1,
                 "name": "Unauthorized"
-              },
-              {
-                "index": 2,
-                "name": "NotInitialized"
-              },
-              {
-                "index": 3,
-                "name": "InvalidDeposit"
-              },
-              {
-                "index": 4,
-                "name": "InvalidWithdraw"
               }
             ]
           }
         },
         "path": [
           "vault",
-          "utils",
+          "nomination_agent_utils",
           "RuntimeError"
         ]
       }
@@ -2455,12 +2529,96 @@ export const metadata = {
       "id": 30,
       "type": {
         "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 31
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 31
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "type": {
+        "def": {
+          "tuple": [
+            4,
+            4,
+            4,
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "id": 32,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 4
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 34
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "type": {
+        "def": {
+          "primitive": "i128"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "type": {
+        "def": {
           "primitive": "u32"
         }
       }
     },
     {
-      "id": 31,
+      "id": 36,
       "type": {
         "def": {
           "variant": {}
@@ -2571,6 +2729,10 @@ export class Contract {
         return this.stateCall('0xb09bcd73', [batch_id])
     }
 
+    get_weight_imbalances(total_pooled: bigint): Promise<Result<[bigint, bigint, bigint, bigint[], bigint[]], LangError>> {
+        return this.stateCall('0xc8e000f1', [total_pooled])
+    }
+
     private async stateCall<T>(selector: string, args: any[]): Promise<T> {
         let input = _abi.encodeMessageInput(selector, args)
         let data = encodeCall(this.address, input)
@@ -2598,7 +2760,14 @@ export interface LangError_CouldNotReadInput {
 
 export type u64 = bigint
 
-export type Constructor = Constructor_new
+export type Constructor = Constructor_custom_era | Constructor_new
+
+export interface Constructor_custom_era {
+    __kind: 'custom_era'
+    shareTokenHash: Hash
+    registryCodeHash: Hash
+    era: u64
+}
 
 export interface Constructor_new {
     __kind: 'new'
@@ -2608,7 +2777,7 @@ export interface Constructor_new {
 
 export type Hash = Bytes
 
-export type Message = Message_adjust_fee | Message_adjust_minimum_stake | Message_cancel_unlock_request | Message_delegate_withdraw_unbonded | Message_get_azero_from_shares | Message_get_batch_id | Message_get_batch_unlock_requests | Message_get_creation_time | Message_get_current_virtual_shares | Message_get_fee_percentage | Message_get_minimum_stake | Message_get_registry_contract | Message_get_role_adjust_fee | Message_get_role_adjust_fee_admin | Message_get_role_owner | Message_get_share_token_contract | Message_get_shares_from_azero | Message_get_total_pooled | Message_get_total_shares | Message_get_unlock_request_count | Message_get_unlock_requests | Message_redeem | Message_redeem_with_withdraw | Message_request_unlock | Message_restake | Message_send_batch_unlock_requests | Message_set_code | Message_stake | Message_transfer_role_adjust_fee | Message_transfer_role_adjust_fee_admin | Message_transfer_role_owner | Message_withdraw_fees
+export type Message = Message_adjust_fee | Message_adjust_minimum_stake | Message_cancel_unlock_request | Message_compound | Message_delegate_withdraw_unbonded | Message_get_azero_from_shares | Message_get_batch_id | Message_get_batch_unlock_requests | Message_get_creation_time | Message_get_current_virtual_shares | Message_get_fee_percentage | Message_get_minimum_stake | Message_get_registry_contract | Message_get_role_adjust_fee | Message_get_role_adjust_fee_admin | Message_get_role_owner | Message_get_share_token_contract | Message_get_shares_from_azero | Message_get_total_pooled | Message_get_total_shares | Message_get_unlock_request_count | Message_get_unlock_requests | Message_get_weight_imbalances | Message_redeem | Message_redeem_with_withdraw | Message_request_unlock | Message_send_batch_unlock_requests | Message_set_code | Message_stake | Message_transfer_role_adjust_fee | Message_transfer_role_adjust_fee_admin | Message_transfer_role_owner | Message_withdraw_fees
 
 /**
  *  ======================== Restricted Functions: Adjust Fee Role ========================
@@ -2640,6 +2809,16 @@ export interface Message_adjust_minimum_stake {
 export interface Message_cancel_unlock_request {
     __kind: 'cancel_unlock_request'
     userUnlockId: bigint
+}
+
+/**
+ *  Compound earned interest for all validators
+ * 
+ *  Can be called by anyone
+ *  Caller earns a fee of 1/1000 of compounded amount as defined by the Agent
+ */
+export interface Message_compound {
+    __kind: 'compound'
 }
 
 /**
@@ -2751,6 +2930,11 @@ export interface Message_get_unlock_requests {
     user: AccountId
 }
 
+export interface Message_get_weight_imbalances {
+    __kind: 'get_weight_imbalances'
+    totalPooled: bigint
+}
+
 /**
  *  Allows a user to withdraw staked AZERO
  * 
@@ -2781,23 +2965,13 @@ export interface Message_redeem_with_withdraw {
 /**
  *  Allow user to begin the unlock process
  *  Transfers sAZERO specified in `shares` argument to the vault contract
- *  Unlock is batched into current two day batch request
+ *  Unlock is batched into current two era batch request
  * 
  *  Caller must approve the psp22 token contract beforehand
  */
 export interface Message_request_unlock {
     __kind: 'request_unlock'
     shares: bigint
-}
-
-/**
- *  Restake earned interest for all validators
- * 
- *  Can be called by anyone
- *  Caller earns a fee of 1/1000 of restaked interest as defined by the Agent
- */
-export interface Message_restake {
-    __kind: 'restake'
 }
 
 /**
@@ -2879,7 +3053,7 @@ export interface Message_withdraw_fees {
     __kind: 'withdraw_fees'
 }
 
-export type Event = Event_BatchUnlockSent | Event_FeesAdjusted | Event_FeesWithdrawn | Event_MinimumStakeAdjusted | Event_OwnershipTransferred | Event_Restaked | Event_RoleSetFeesAdminTransferred | Event_RoleSetFeesTransferred | Event_Staked | Event_UnlockCanceled | Event_UnlockRedeemed | Event_UnlockRequested
+export type Event = Event_BatchUnlockSent | Event_Compounded | Event_FeesAdjusted | Event_FeesWithdrawn | Event_MinimumStakeAdjusted | Event_OwnershipTransferred | Event_RoleSetFeesAdminTransferred | Event_RoleSetFeesTransferred | Event_Staked | Event_UnlockCanceled | Event_UnlockRedeemed | Event_UnlockRequested
 
 export interface Event_BatchUnlockSent {
     __kind: 'BatchUnlockSent'
@@ -2887,6 +3061,14 @@ export interface Event_BatchUnlockSent {
     shares: bigint
     virtualShares: bigint
     spotValue: bigint
+}
+
+export interface Event_Compounded {
+    __kind: 'Compounded'
+    caller: AccountId
+    azero: bigint
+    incentive: bigint
+    virtualShares: bigint
 }
 
 export interface Event_FeesAdjusted {
@@ -2908,14 +3090,6 @@ export interface Event_MinimumStakeAdjusted {
 export interface Event_OwnershipTransferred {
     __kind: 'OwnershipTransferred'
     newAccount: AccountId
-}
-
-export interface Event_Restaked {
-    __kind: 'Restaked'
-    caller: AccountId
-    azero: bigint
-    incentive: bigint
-    virtualShares: bigint
 }
 
 export interface Event_RoleSetFeesAdminTransferred {
