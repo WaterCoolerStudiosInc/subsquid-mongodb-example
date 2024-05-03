@@ -190,8 +190,8 @@ export async function startIndexingVault(
                             { 
                                 $set: {
                                     event_id: event.id,
-                                    azero: decodedEvent.azero,
-                                    incentive: decodedEvent.incentive,
+                                    azero: decodedEvent.azero.toString(),
+                                    incentive: decodedEvent.incentive.toString(),
                                     timestamp: block.header.timestamp,
                                     block: block.header.height
                                 }
@@ -227,7 +227,7 @@ export async function startIndexingVault(
                             { 
                                 $set: {
                                     event_id: event.id,
-                                    shares: decodedEvent.shares,
+                                    shares: decodedEvent.shares.toString(),
                                     timestamp: block.header.timestamp,
                                     block: block.header.height
                                 }
