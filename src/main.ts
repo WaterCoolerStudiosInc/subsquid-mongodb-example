@@ -1,18 +1,25 @@
 import 'dotenv/config';
 import {
-    processor,
-} from './processor'
-import { MongoDBDatabase } from './mongo-database'
-import { startIndexingVault } from './index-events'
+    startProcessor,
+} from './processor.js'
+import { MongoDBDatabase } from './mongo-database.js'
+import { getContracts } from './utils/get-contracts.js';
+import { assertNotNull } from '@subsquid/substrate-processor';
 
-const localConnectionString = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
+async function main() {
+    const contracts = await getContracts()
 
-//TODO would be nice to read the starting block in automagically
-const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
-                                    process.env.DB_NAME || 'aleph-indexer', 
-                                    Number(process.env.STARTING_BLOCK) || 1)
-    
-processor.run(mongoDB, async ctx => {
-    console.log("PROCESSING LOOP")
-    await startIndexingVault(ctx)
-})
+    const localConnectionString = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
+    const vaultContract =  assertNotNull(contracts.find(n => n.name == 'vault'), `Contract - vault couldnt be loaded from npm`)
+
+    const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
+                                        process.env.DB_NAME || 'aleph-indexer', 
+                                        vaultContract?.blockNumber || 1)
+    await startProcessor(vaultContract, mongoDB)
+}
+
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })

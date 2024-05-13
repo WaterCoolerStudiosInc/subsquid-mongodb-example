@@ -1,14 +1,13 @@
 import assert from 'assert'
-import * as vault from './abi/vault'
-import {
-  VAULT_CONTRACT_ADDRESS,
-} from './processor'
+import * as vault from './abi/vault.js'
 import { DataHandlerContext } from '@subsquid/substrate-processor'
 import { Collection, Db } from 'mongodb'
-import { Analytics, AnalyticsChange, ArithmeticType } from './models/analytics'
-import { addStrings, subtractStrings } from './utils/big-number-utils'
+import { Analytics, AnalyticsChange, ArithmeticType } from './models/analytics.js'
+import { addStrings, subtractStrings } from './utils/big-number-utils.js'
+import { KintsuContract } from './utils/get-contracts.js'
 
 export async function startIndexingVault(
+    contract: KintsuContract,
     ctx: DataHandlerContext<Db, {
     block: {
         timestamp: true;
@@ -22,7 +21,7 @@ export async function startIndexingVault(
     for (const block of ctx.blocks) {
       assert(block.header.timestamp, `Block ${block.header.height} had no timestamp`)
       for (const event of block.events) {
-          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === VAULT_CONTRACT_ADDRESS) {
+          if (event.name === 'Contracts.ContractEmitted' && event.args.contract === contract.address) {
               assert(event.extrinsic, `Event ${event} arrived without a parent extrinsic`)
               const decodedEvent = vault.decodeEvent(event.args.data)
 

@@ -1,19 +1,18 @@
 {
   "compilerOptions": {
+    "module": "ESNext",
     "target": "ESNext",
-    "module": "CommonJS",
-    "lib": ["ESNext", "DOM"],
-    "outDir": "lib",
-    "strict": true,
-    "declaration": false,
-    "sourceMap": true,
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": true,
+    "outDir": "./lib",
+    "baseUrl": ".",
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "src/**/*",
+    "node_modules/@water-cooler-studios/kintsu-contracts/**/*"
+  ],
   "exclude": ["node_modules"]
 }
