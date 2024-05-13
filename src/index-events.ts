@@ -1,12 +1,10 @@
 import assert from 'assert'
-import * as vault from './abi/vault'
-import {
-  VAULT_CONTRACT_ADDRESS,
-} from './processor'
+import * as vault from './abi/vault.js'
 import { DataHandlerContext } from '@subsquid/substrate-processor'
 import { Collection, Db } from 'mongodb'
-import { Analytics, AnalyticsChange, ArithmeticType } from './models/analytics'
-import { addStrings, subtractStrings } from './utils/big-number-utils'
+import { Analytics, AnalyticsChange, ArithmeticType } from './models/analytics.js'
+import { addStrings, subtractStrings } from './utils/big-number-utils.js'
+import { VAULT_CONTRACT_ADDRESS } from './processor.js'
 
 export async function startIndexingVault(
     ctx: DataHandlerContext<Db, {
