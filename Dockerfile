@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .npmrc ./
 
 # Install Python and build dependencies for native modules
 RUN apk add --no-cache --virtual .gyp python3 make g++ \
