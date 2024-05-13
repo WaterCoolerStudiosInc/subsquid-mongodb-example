@@ -1,3 +1,6 @@
+import * as ss58 from '@subsquid/ss58'
+import { assertNotNull } from '@subsquid/substrate-processor'
+
 export enum ContractIds {
   Vault = 'vault',
   Registry = 'registry',
@@ -22,7 +25,7 @@ export async function getContracts() {
 
     contracts.push({
       name: contractId,
-      address: address,
+      address: ss58.codec(42).decode(assertNotNull(address, 'Vault contract address must be provided')),
       blockNumber: blockNumber,
       abi: abi
     } as KintsuContract)
