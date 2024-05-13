@@ -1,25 +1,21 @@
 import 'dotenv/config';
 import {
-    startProcessor,
+    processor,
 } from './processor.js'
 import { MongoDBDatabase } from './mongo-database.js'
-import { getContracts } from './utils/get-contracts.js';
-import { assertNotNull } from '@subsquid/substrate-processor';
+import { startIndexingVault } from './index-events.js';
 
-async function main() {
-    const contracts = await getContracts()
+// export const CONTRACTS = await getContracts()
+// export const vaultContract =  assertNotNull(CONTRACTS.find(n => n.name == 'vault'), `Contract - vault couldnt be loaded from npm`)
+import { blockNumber } from '@water-cooler-studios/kintsu-contracts/deployments/vault/alephzero-testnet.js'
 
-    const localConnectionString = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
-    const vaultContract =  assertNotNull(contracts.find(n => n.name == 'vault'), `Contract - vault couldnt be loaded from npm`)
+const localConnectionString = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
 
-    const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
-                                        process.env.DB_NAME || 'aleph-indexer', 
-                                        vaultContract?.blockNumber || 1)
-    await startProcessor(vaultContract, mongoDB)
-}
+const mongoDB = new MongoDBDatabase(process.env.DB_URL || localConnectionString,
+                                    process.env.DB_NAME || 'aleph-indexer', 
+                                    blockNumber || 1)
 
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
+processor.run(mongoDB, async (ctx: any) => {
+  console.log("PROCESSING LOOP")
+  await startIndexingVault(ctx)
+})
