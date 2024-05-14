@@ -22,7 +22,8 @@ const GATEWAY_URL = process.env.NETWORK === 'aleph-zero' ? 'https://v2.archive.s
 export const processor = new SubstrateBatchProcessor()
     .setGateway(GATEWAY_URL)
     .setRpcEndpoint({
-        url: assertNotNull(process.env.RPC_ENDPOINT, 'RPC endpoint must be provided')
+        url: assertNotNull(process.env.RPC_ENDPOINT, 'RPC endpoint must be provided'),
+        rateLimit: 100
     })
     .addContractsContractEmitted({
         contractAddress: [VAULT_CONTRACT_ADDRESS],
