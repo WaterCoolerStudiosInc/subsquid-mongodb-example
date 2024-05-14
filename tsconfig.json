@@ -11,8 +11,7 @@
     "baseUrl": ".",
   },
   "include": [
-    "src/**/*",
-    "node_modules/@water-cooler-studios/kintsu-contracts/**/*"
+    "src/**/*"
   ],
   "exclude": ["node_modules"]
 }
