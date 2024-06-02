@@ -18,12 +18,6 @@ npm install
 # 3. Start the app and db via docker (make sure docker is running first)
 sqd up
 
-# 5. Build and run the graphql server (used strictly for local testing)
-cd graphql
-npm install
-npm run build
-npm run dev
-
 # The app/database can be reset via
 sqd down
 
@@ -31,7 +25,7 @@ sqd down
 
 - The database can be accessed locally from `http://localhost:8081/db/aleph-indexer/`, after running sqd process
 
-- GraphQl explorer can be accessed locally from `http://localhost:3001/graphql` once thats running. Running a query will quickly tell you if things are working properly
+- GraphQl explorer can be accessed locally from `http://localhost:4000/graphql` once thats running. Running a query will quickly tell you if things are working properly
 
 ## Development guide
 

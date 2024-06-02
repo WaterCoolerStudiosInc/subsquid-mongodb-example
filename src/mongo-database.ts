@@ -11,7 +11,9 @@ export class MongoDBDatabase implements FinalDatabase<Db> {
   private startingFrom: number
 
   constructor(private dbUrl: string, private dbName: string, private startingHeight: number = -1) {
-    this.client = new MongoClient(this.dbUrl)
+    this.client = new MongoClient(this.dbUrl, {
+      authSource: 'admin'
+    })
     this.db = this.client.db(this.dbName)
 
     this.startingFrom = startingHeight
