@@ -56,5 +56,5 @@
 - `git pull` using your username and your generated access token as the password
 - `sudo docker-compose down`
 - `sudo docker-compose up -d`
-- If you need to blow the database away to pick up new changes you may need to stop the container and run `docker system prune -a`
+- If you need to blow the database away to pick up new changes you may need to stop the container and run `docker stop `docker ps -qa` > /dev/null 2>&1; docker system prune --volumes --all;`
 - Or you may delete the states collection from the database to begin indexing from the block stored in .env again
