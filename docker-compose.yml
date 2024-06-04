@@ -23,6 +23,21 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: ${DB_PASS}
       ME_CONFIG_BASICAUTH: true  
 
+  graphql:
+    image: graphql:latest
+    restart: always
+    ports:
+      - 4000:4000
+    build:
+      context: graphql
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: mongodb://${DB_USER}:${DB_PASS}@mongo:${DB_PORT}/${DB_NAME}?authSource=admin
+      NPM_TOKEN: ${NPM_TOKEN}
+    depends_on:
+      - mongo
+      - mongo-express
+
   processor:
     image: indexer:latest
     restart: always
