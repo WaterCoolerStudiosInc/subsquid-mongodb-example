@@ -24,17 +24,3 @@ sqd down
 ```
 
 - The database can be accessed locally from `http://localhost:8081/db/aleph-indexer/`, after running sqd process
-
-- GraphQl explorer can be accessed locally from `http://localhost:4000/graphql` once thats running. Running a query will quickly tell you if things are working properly
-
-## Development guide
-
-When changing the variables stored to the database within main.ts, we must also change the corresponding model within graphql/models and the type definition within graphql/type-defs, that correspond with the correct collection. When adding a new collection, we must add a : resolver, type-def, and model within the graphql substructure. Ideally we should auto generate all of this somehow,
-
-## Notes
-
-- Subsquid gateways for aleph zero can be found at:
-  https://v2.archive.subsquid.io/network/aleph-zero
-  https://v2.archive.subsquid.io/network/aleph-zero-testnet
-
-- ABI json files should be located at the top level abi folder. You should generate new ts models after updating the contract. That can be done like so `npx squid-ink-typegen --abi abi/vault.json --output src/abi/vault.ts`
